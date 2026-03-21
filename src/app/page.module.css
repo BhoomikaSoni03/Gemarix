@@ -1,0 +1,123 @@
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 2rem;
+    background: radial-gradient(circle at center, transparent 0%, var(--color-bg) 100%);
+}
+
+.content {
+    max-width: 800px;
+    z-index: 10;
+}
+
+.title {
+    font-size: clamp(3rem, 6vw, 5rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeInDown 1s ease forwards 0.5s;
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    color: #a0a0a0;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards 1s;
+}
+
+.actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeInUp 1s ease forwards 1.2s;
+}
+
+.primaryButton {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+    padding: 1rem 2.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 1px solid var(--color-accent);
+}
+
+.primaryButton:hover {
+    background-color: transparent;
+    color: var(--color-accent);
+}
+
+.secondaryButton {
+    background-color: transparent;
+    color: var(--color-text);
+    padding: 1rem 2.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    border: 1px solid var(--color-border);
+    transition: all 0.3s ease;
+}
+
+.secondaryButton:hover {
+    border-color: var(--color-text);
+}
+
+.section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 6rem 0;
+    background-color: var(--color-bg);
+    position: relative;
+    z-index: 10;
+}
+
+.sectionTitle {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    margin-bottom: 1rem;
+}
+
+.sectionText {
+    font-size: 1.25rem;
+    color: #a0a0a0;
+    font-weight: 300;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
