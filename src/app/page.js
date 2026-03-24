@@ -1,74 +1,84 @@
+'use client';
+
 import Link from 'next/link';
+import Image from 'next/image';
 import MarbleScene from '@/components/3d/MarbleScene';
 import Footer from '@/components/ui/Footer';
-import Image from 'next/image';
 import styles from './page.module.css';
+import { useEffect, useState } from 'react';
+
+const inSituImages = [
+  { img: '/images/insitu-bathroom.png', label: 'Master Bathroom', desc: 'Pristine Calacatta' },
+  { img: '/images/insitu-office.png', label: 'Executive Office', desc: 'Exotic Gold Noir' },
+  { img: '/images/insitu-home.png', label: 'Living Room', desc: 'Statuario Premium' },
+  { img: '/images/insitu-hotel.png', label: 'Hotel Lobby', desc: 'Rosso Levanto' },
+];
 
 export default function Home() {
+  const [scrollY, setScrollY] = useState(0);
+  const [windowHeight, setWindowHeight] = useState(1000);
+
+  useEffect(() => {
+    setWindowHeight(window.innerHeight);
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollProgress = windowHeight > 0 ? Math.min(Math.max(scrollY / windowHeight, 0), 1) : 0;
+  // Company name fades in only AFTER balls have settled (past 85% scroll progress)
+  const showBrand = scrollProgress > 0.85;
+
   return (
-    <>
+    <div className={styles.scrollytellingWrapper}>
       <MarbleScene />
 
-      <div className={styles.hero}>
-        <div className={styles.heroContent}>
-          <h1 className={styles.title}>
-            Discover the <span className="premium-gradient-text">Finest Marbles</span>
-          </h1>
-          <p className={styles.subtitle}>
-            An exclusive B2B collection curated for visionary architects and designers.
-          </p>
-
-          <div className={styles.actions}>
-            <Link href="/catalog" className={styles.primaryButton}>
-              Explore Collection
-            </Link>
-            <Link href="/contact" className={styles.secondaryButton}>
-              Enquire Now
-            </Link>
-          </div>
+      <header className={styles.topNav}>
+        <Link href="/" className={styles.logo}>Gemarix</Link>
+        <div className={styles.navLinks}>
+          <Link href="/catalog">Gallery</Link>
+          <Link href="/catalog">Specs</Link>
         </div>
+      </header>
+
+      {/* Spacer to trigger scroll physics */}
+      <div className={styles.scrollSpacer}></div>
+
+      {/* Company name appears AFTER the three balls have settled at the bottom */}
+      <div className={`${styles.brandSection} ${showBrand ? styles.visible : ''}`}>
+        <h1 className={styles.brandTitle}>Gemarix</h1>
+        <p className={styles.tagline}>Timeless Stone. Modern Elegance.</p>
+        <Link href="/catalog" className={styles.exploreBtn}>Explore Collection</Link>
       </div>
 
-      <section className={styles.collectionSection}>
-        <div className={styles.collectionContent}>
-          <h2 className={styles.sectionTitle}>The Aesthetic Collection</h2>
-          <p className={styles.sectionText}>Scrolling through perfection. Experience the flawless textures of exotic natural stone.</p>
+      {/* === Sections below the fold (normal scroll) === */}
+      <div className={styles.belowFold}>
 
-          <div className={styles.cardList}>
-            <div className={styles.card}>
-              <div className={styles.cardImageWrapper}>
-                <Image src="/images/premium-dark.png" alt="Exotic Black Marble" fill className={styles.cardImage} />
-              </div>
-              <div className={styles.cardInfo}>
-                <h3>Exotic Gold Noir</h3>
-                <p>Deep black canvas pierced by striking golden veins.</p>
-              </div>
-            </div>
-
-            <div className={styles.card}>
-              <div className={styles.cardImageWrapper}>
-                <Image src="/images/premium-white.png" alt="Calacatta White" fill className={styles.cardImage} />
-              </div>
-              <div className={styles.cardInfo}>
-                <h3>Pristine Calacatta</h3>
-                <p>Immaculate white foundation with delicate grey and gold sweeps.</p>
-              </div>
-            </div>
-
-            <div className={styles.card}>
-              <div className={styles.cardImageWrapper}>
-                <div className={`${styles.cardImage} ${styles.placeholderFallback}`}></div>
-              </div>
-              <div className={styles.cardInfo}>
-                <h3>And many more...</h3>
-                <Link href="/catalog" className={styles.viewAllLink}>View Full Catalog &rarr;</Link>
-              </div>
-            </div>
+        {/* In-Situ Gallery Section */}
+        <section className={styles.inSituSection}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Stone in the Wild</h2>
+            <p className={styles.sectionSubtitle}>Where our marble meets the world's most extraordinary spaces.</p>
           </div>
-        </div>
-      </section>
 
-      <Footer />
-    </>
+          <div className={styles.inSituGrid}>
+            {inSituImages.map((item) => (
+              <div key={item.label} className={styles.inSituCard}>
+                <div className={styles.inSituImgWrapper}>
+                  <Image src={item.img} alt={item.label} fill className={styles.inSituImg} />
+                  <div className={styles.inSituOverlay}>
+                    <span className={styles.inSituLabel}>{item.label}</span>
+                    <span className={styles.inSituDesc}>{item.desc}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <Footer />
+      </div>
+    </div>
   );
 }

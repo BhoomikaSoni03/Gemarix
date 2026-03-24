@@ -1,49 +1,77 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './page.module.css';
+import Footer from '@/components/ui/Footer';
+import CatalogBackground from '@/components/3d/CatalogBackground';
 
-// Mock list of marbles for the showcase UI.
+const featuredMarble = {
+    id: 'statuario',
+    name: 'Statuario Premium',
+    type: 'Marble',
+    description: 'The absolute pinnacle of luxury. Pure brilliantly white background with bold, dramatic sweeping dark grey veins. The finest choice for an immaculate showcase.',
+    img: '/images/statuario-premium.png'
+};
+
 const mockMarbles = [
-    { id: 1, name: 'Calacatta Gold', type: 'Marble', description: 'Classic Italian marble with striking gold veins. Perfect for luxurious countertops, feature walls, and high-end residential projects.', isChosenOne: true, img: 'https://images.unsplash.com/photo-1606722590583-6951b5ea92ad?auto=format&fit=crop&q=80&w=800' },
-    { id: 2, name: 'Nero Marquina', type: 'Marble', description: 'Deep black marble with striking white veins from Spain. Excellent for contrasting floors, modern bathrooms, and statement pieces.', isChosenOne: true, img: 'https://images.unsplash.com/photo-1598373356870-ab4d57c5bf38?auto=format&fit=crop&q=80&w=800' },
-    { id: 3, name: 'Blue Bahia', type: 'Granite', description: 'Exotic blue granite from Brazil for luxury accents. Highly durable and rare, featuring stunning semi-precious sodalite blue patterns.', isChosenOne: false, img: 'https://images.unsplash.com/photo-1620021614275-f0ea9f8638b9?auto=format&fit=crop&q=80&w=800' },
-    { id: 4, name: 'Carrara White', type: 'Marble', description: 'Timeless white and grey marble sourced from Tuscany. The absolute classic choice for elegant sculpting, traditional kitchens, and sophisticated commercial spaces.', isChosenOne: false, img: 'https://images.unsplash.com/photo-1598443915124-780826955dfc?auto=format&fit=crop&q=80&w=800' },
-    { id: 5, name: 'Statuario', type: 'Marble', description: 'One of the most precious marbles in the world. Bright white background with distinct, bold grey veining. Highly sought after by elite designers.', isChosenOne: true, img: 'https://images.unsplash.com/photo-1610488019323-999331825227?auto=format&fit=crop&q=80&w=800' },
-    { id: 6, name: 'Onyx Verde', type: 'Onyx', description: 'A translucent green onyx stone that can be backlit for a breathtaking glowing effect in premium bars and hotel lobbies.', isChosenOne: true, img: 'https://images.unsplash.com/photo-1601666872901-d7ad1a21e05d?auto=format&fit=crop&q=80&w=800' },
-    { id: 7, name: 'Emperador Dark', type: 'Marble', description: 'Rich, dark brown marble with intricate webbing. Provides warmth and sophistication to traditional interiors, libraries, or cigar lounges.', isChosenOne: false, img: 'https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?auto=format&fit=crop&q=80&w=800' },
-    { id: 8, name: 'Taj Mahal Quartzite', type: 'Quartzite', description: 'The elegant look of marble but the durability of granite. Soft creamy tones perfect for high-traffic luxury kitchens.', isChosenOne: false, img: 'https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?auto=format&fit=crop&q=80&w=800' }
+    { id: 1, name: 'Exotic Gold Noir', type: 'Marble', description: 'Deep black canvas pierced by striking golden veins.', img: '/images/premium-dark.png' },
+    { id: 2, name: 'Pristine Calacatta', type: 'Marble', description: 'Immaculate white foundation with delicate grey sweeps.', img: '/images/premium-white.png' },
+    { id: 3, name: 'Emerald Onyx', type: 'Onyx', description: 'Translucent dark green with glowing gold patterns.', img: '/images/emerald-onyx.png' },
+    { id: 4, name: 'Blue Sodalite', type: 'Granite', description: 'Deep ocean blue colors mixed with stark white.', img: '/images/blue-sodalite.png' },
+    { id: 5, name: 'Rosso Levanto', type: 'Marble', description: 'Deep burgundy red background with white veins.', img: '/images/rosso-levanto.png' },
 ];
 
 export default function Catalog() {
     return (
         <div className={styles.container}>
-            <header className={styles.header}>
-                <h1 className={styles.title}>The Collection</h1>
-                <p className={styles.subtitle}>Browse our curated selection of premium stones.</p>
-                <Link href="/" className={styles.backLink}>&larr; Back to Home</Link>
+            <CatalogBackground />
+            <header className={styles.topNav}>
+                <div className={styles.navInner}>
+                    <Link href="/" className={styles.brand}>Gemarix</Link>
+                    <Link href="/" className={styles.backLink}>Exit Catalog ✕</Link>
+                </div>
             </header>
 
-            <div className={styles.grid}>
-                {mockMarbles.map((marble) => (
-                    <div key={marble.id} className={styles.card}>
-                        <div className={styles.imageWrapper}>
-                            <div className={styles.placeholderImg} style={{ backgroundImage: `url(${marble.img})` }}>
-                                {marble.isChosenOne && <span className={styles.badge}>Chosen One</span>}
-                            </div>
-                        </div>
-                        <div className={styles.cardInfo}>
-                            <div className={styles.cardHeader}>
-                                <h3>{marble.name}</h3>
-                                <span className={styles.type}>{marble.type}</span>
-                            </div>
-                            <p className={styles.description}>{marble.description}</p>
+            <section className={styles.featuredSection}>
+                <div className={styles.featuredImageWrapper}>
+                    <Image src={featuredMarble.img} alt={featuredMarble.name} fill className={styles.featuredImage} priority />
+                    <div className={styles.overlay}></div>
+                </div>
+                <div className={styles.featuredContent}>
+                    <div className={styles.featuredText}>
+                        <span className={styles.badge}>The Finest</span>
+                        <h1 className={styles.featuredTitle}>{featuredMarble.name}</h1>
+                        <p className={styles.featuredDesc}>{featuredMarble.description}</p>
+                        <Link href={`/contact?marble=${featuredMarble.name}`} className={styles.primaryBtn}>Enquire Now</Link>
+                    </div>
+                </div>
+            </section>
 
-                            <Link href={`/contact?marble=${marble.name}`} className={styles.enquireBtn}>
-                                Enquire Now
+            <section className={styles.gridSection}>
+                <div className={styles.gridHeader}>
+                    <h2 className={styles.gridTitle}>The Masterpiece Collection</h2>
+                    <p className={styles.gridSubtitle}>A curated selection of the Earth's rarest natural stones.</p>
+                </div>
+
+                <div className={styles.bentoGrid}>
+                    {mockMarbles.map((marble, idx) => (
+                        <div key={marble.id} className={`${styles.bentoCard} ${styles['bento' + idx]}`}>
+                            <Link href={`/contact?marble=${marble.name}`} className={styles.cardLink}>
+                                <div className={styles.cardImageWrapper}>
+                                    <Image src={marble.img} alt={marble.name} fill className={styles.cardImage} />
+                                    <div className={styles.cardOverlay}>
+                                        <div className={styles.bentoInfo}>
+                                            <h3>{marble.name}</h3>
+                                            <span>{marble.type}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </Link>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            </section>
+
+            <Footer />
         </div>
     );
 }

@@ -1,0 +1,42 @@
+.cursor {
+    position: fixed;
+    top: -10px;
+    /* Offset by half the width/height to perfectly center on the very tip of the mouse pointer */
+    left: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--color-accent);
+    border: 3px solid #000;
+    /* Black color boundary */
+    border-radius: 50%;
+    pointer-events: none;
+    /* Crucial so it doesn't block physical clicks */
+    z-index: 9999;
+    mix-blend-mode: normal;
+    /* Turned off difference mode so the black border stands out */
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        background-color 0.3s ease,
+        border 0.3s ease,
+        top 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Initially hide on mobile/touch screens using media queries */
+    display: none;
+}
+
+/* Only show the custom cursor on devices that support actual hardware hovering (mouse/trackpad) */
+@media (any-hover: hover) {
+    .cursor {
+        display: block;
+    }
+}
+
+.hovering {
+    width: 60px;
+    height: 60px;
+    top: -30px;
+    left: -30px;
+    background-color: transparent;
+    border: 2px solid #000;
+}

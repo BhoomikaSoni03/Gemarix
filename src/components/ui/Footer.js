@@ -23,7 +23,6 @@ export default function Footer() {
                     <h3>Company</h3>
                     <Link href="/about">Our Story</Link>
                     <Link href="/contact">Inquiries</Link>
-                    <Link href="/admin">Admin Portal</Link>
                 </div>
             </div>
 

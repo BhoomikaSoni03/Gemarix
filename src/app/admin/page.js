@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { redirect } from 'next/navigation';
 import styles from './page.module.css';
+import LogoutButton from './LogoutButton';
 
 export default async function AdminDashboard() {
     const session = await getServerSession(authOptions);
@@ -22,8 +23,11 @@ export default async function AdminDashboard() {
     return (
         <div className={styles.container}>
             <header className={styles.header}>
-                <h1>Admin Dashboard</h1>
-                <p>Welcome back, {session.user.name}</p>
+                <div>
+                    <h1>Admin Dashboard</h1>
+                    <p>Welcome back, {session.user.name}</p>
+                </div>
+                <LogoutButton />
             </header>
 
             <div className={styles.statsGrid}>

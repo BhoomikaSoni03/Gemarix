@@ -1,4 +1,5 @@
 import './globals.css';
+import CustomCursor from '@/components/ui/CustomCursor';
 
 export const metadata = {
   title: 'Gemarix | Premium Marble Collection',
@@ -9,6 +10,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+        <CustomCursor />
         <main>{children}</main>
       </body>
     </html>
