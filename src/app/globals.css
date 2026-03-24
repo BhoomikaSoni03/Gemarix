@@ -3,7 +3,8 @@
 :root {
   --color-bg: #0a0a0a;
   --color-text: #f0f0f0;
-  --color-accent: #d4af37; /* Gold accent */
+  --color-accent: #d4af37;
+  /* Gold accent */
   --color-secondary: #1a1a1a;
   --color-border: #333333;
 }
@@ -22,7 +23,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Playfair Display', serif;
   font-weight: 400;
 }
@@ -46,12 +52,14 @@ a {
   width: 100vw;
   height: 100vh;
   z-index: -1;
-  pointer-events: none; /* Let clicks pass through to UI */
+  pointer-events: none;
+  /* Let clicks pass through to UI */
 }
 
 /* Utility classes for styling */
 .premium-gradient-text {
   background: linear-gradient(45deg, #ffffff, #d4af37);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
