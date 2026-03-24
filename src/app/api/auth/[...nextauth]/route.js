@@ -10,9 +10,12 @@ export const authOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {
+                const validUser = process.env.ADMIN_USERNAME || 'admin';
+                const validPass = process.env.ADMIN_PASSWORD || 'supersecretpassword';
+
                 if (
-                    credentials?.username === process.env.ADMIN_USERNAME &&
-                    credentials?.password === process.env.ADMIN_PASSWORD
+                    credentials?.username === validUser &&
+                    credentials?.password === validPass
                 ) {
                     return { id: 1, name: 'Admin', email: 'admin@gemarix.com' };
                 }

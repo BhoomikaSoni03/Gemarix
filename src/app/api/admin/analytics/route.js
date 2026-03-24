@@ -1,9 +1,16 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import Inquiry from '@/models/Inquiry';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export async function GET() {
     try {
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ error: 'Unauthorized Access' }, { status: 401 });
+        }
+
         await connectDB();
 
         const totalInquiries = await Inquiry.countDocuments();
