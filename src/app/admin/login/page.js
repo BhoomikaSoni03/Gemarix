@@ -15,8 +15,8 @@ export default function AdminLogin() {
         e.preventDefault();
         const res = await signIn('credentials', {
             redirect: false,
-            username,
-            password,
+            username: username.trim(),
+            password: password.trim(),
         });
 
         if (res.error) {

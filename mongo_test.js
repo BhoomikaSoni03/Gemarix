@@ -1,5 +1,11 @@
+require('dotenv').config({ path: '.env.local' });
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://bhoomikaswarnkar391:gemarix123@cluster0.feearzd.mongodb.net/?appName=Cluster0";
+
+const uri = process.env.MONGODB_URI;
+if (!uri) {
+    console.error('❌ MONGODB_URI is not set in .env.local');
+    process.exit(1);
+}
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
     serverApi: {

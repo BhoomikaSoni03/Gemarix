@@ -11,7 +11,8 @@ export async function validateEmailDomain(email) {
         const mxRecords = await resolveMx(domain);
         return mxRecords && mxRecords.length > 0;
     } catch (error) {
-        console.error(`Email validation error for ${email}:`, error.message);
+        const domain = email.split('@')[1] || 'unknown';
+        console.error(`Email validation error for domain [${domain}]:`, error.message);
         return false; // Domain doesn't have MX records or doesn't exist
     }
 }
