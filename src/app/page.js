@@ -38,7 +38,8 @@ export default function Home() {
         <Link href="/" className={styles.logo}>Gemarix</Link>
         <div className={styles.navLinks}>
           <Link href="/catalog">Gallery</Link>
-          <Link href="/catalog">Specs</Link>
+          <Link href="/blogs">Journal</Link>
+          <Link href="/contact">Contact</Link>
         </div>
       </header>
 

@@ -3,24 +3,54 @@ import Image from 'next/image';
 import styles from './page.module.css';
 import Footer from '@/components/ui/Footer';
 import CatalogBackground from '@/components/3d/CatalogBackground';
+import dbConnect from '@/lib/db';
+import Marble from '@/models/Marble';
 
-const featuredMarble = {
-    id: 'statuario',
-    name: 'Statuario Premium',
-    type: 'Marble',
-    description: 'The absolute pinnacle of luxury. Pure brilliantly white background with bold, dramatic sweeping dark grey veins. The finest choice for an immaculate showcase.',
-    img: '/images/statuario-premium.png'
-};
+export const dynamic = 'force-dynamic';
 
-const mockMarbles = [
-    { id: 1, name: 'Exotic Gold Noir', type: 'Marble', description: 'Deep black canvas pierced by striking golden veins.', img: '/images/premium-dark.png' },
-    { id: 2, name: 'Pristine Calacatta', type: 'Marble', description: 'Immaculate white foundation with delicate grey sweeps.', img: '/images/premium-white.png' },
-    { id: 3, name: 'Emerald Onyx', type: 'Onyx', description: 'Translucent dark green with glowing gold patterns.', img: '/images/emerald-onyx.png' },
-    { id: 4, name: 'Blue Sodalite', type: 'Granite', description: 'Deep ocean blue colors mixed with stark white.', img: '/images/blue-sodalite.png' },
-    { id: 5, name: 'Rosso Levanto', type: 'Marble', description: 'Deep burgundy red background with white veins.', img: '/images/rosso-levanto.png' },
-];
+export default async function Catalog() {
+    await dbConnect();
+    // Fetch real marbles from MongoDB
+    const marblesRes = await Marble.find({}).sort({ createdAt: -1 }).lean();
+    
+    // Fallback safely if db is empty
+    if (!marblesRes || marblesRes.length === 0) {
+        return (
+            <div className={styles.container}>
+                <CatalogBackground />
+                <header className={styles.topNav}>
+                    <div className={styles.navInner}>
+                        <Link href="/" className={styles.brand}>Gemarix</Link>
+                        <Link href="/" className={styles.backLink}>Exit Catalog ✕</Link>
+                    </div>
+                </header>
+                <div style={{ height: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                    <h2>Our collection is currently being updated.</h2>
+                </div>
+            </div>
+        );
+    }
+    
+    // Find the primary featured marble, or fallback to the first one available
+    const featuredMarbleRaw = marblesRes.find(m => m.isFeatured) || marblesRes[0];
+    
+    // Construct standard DTOs
+    const featuredMarble = {
+        name: featuredMarbleRaw.name,
+        type: featuredMarbleRaw.type,
+        description: featuredMarbleRaw.description || 'The absolute pinnacle of luxury stone.',
+        img: (featuredMarbleRaw.images && featuredMarbleRaw.images.length > 0) ? featuredMarbleRaw.images[0] : '/images/statuario-premium.png'
+    };
 
-export default function Catalog() {
+    const regularMarbles = marblesRes.filter(m => m._id !== featuredMarbleRaw._id).map((marble) => ({
+        id: marble._id.toString(),
+        name: marble.name,
+        type: marble.type,
+        description: marble.description,
+        img: (marble.images && marble.images.length > 0) ? marble.images[0] : '/images/premium-dark.png',
+        badge: marble.isChosenOne ? "Editor's Choice" : null
+    }));
+
     return (
         <div className={styles.container}>
             <CatalogBackground />
@@ -41,7 +71,7 @@ export default function Catalog() {
                         <span className={styles.badge}>The Finest</span>
                         <h1 className={styles.featuredTitle}>{featuredMarble.name}</h1>
                         <p className={styles.featuredDesc}>{featuredMarble.description}</p>
-                        <Link href={`/contact?marble=${featuredMarble.name}`} className={styles.primaryBtn}>Enquire Now</Link>
+                        <Link href={`/contact?marble=${encodeURIComponent(featuredMarble.name)}`} className={styles.primaryBtn}>Enquire Now</Link>
                     </div>
                 </div>
             </section>
@@ -53,13 +83,14 @@ export default function Catalog() {
                 </div>
 
                 <div className={styles.bentoGrid}>
-                    {mockMarbles.map((marble, idx) => (
-                        <div key={marble.id} className={`${styles.bentoCard} ${styles['bento' + idx]}`}>
-                            <Link href={`/contact?marble=${marble.name}`} className={styles.cardLink}>
+                    {regularMarbles.map((marble, idx) => (
+                        <div key={marble.id} className={`${styles.bentoCard} ${styles['bento' + (idx % 6)]}`}>
+                            <Link href={`/contact?marble=${encodeURIComponent(marble.name)}`} className={styles.cardLink}>
                                 <div className={styles.cardImageWrapper}>
                                     <Image src={marble.img} alt={marble.name} fill className={styles.cardImage} />
                                     <div className={styles.cardOverlay}>
                                         <div className={styles.bentoInfo}>
+                                            {marble.badge && <span className={styles.cardBadge} style={{ fontSize: '0.7rem', padding: '2px 6px', background: 'var(--a-gold)', color: '#000', borderRadius: 4, display: 'inline-block', marginBottom: 4 }}>{marble.badge}</span>}
                                             <h3>{marble.name}</h3>
                                             <span>{marble.type}</span>
                                         </div>
